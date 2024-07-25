@@ -1,0 +1,18 @@
+[package]
+name = "rust_kernel_module"
+version = "0.1.0"
+authors = ["Your Name <your.email@example.com>"]
+edition = "2018"
+
+[dependencies]
+# Add dependencies here
+
+[profile.release]
+codegen-units = 1
+incremental = false
+lto = true
+opt-level = 'z'
+panic = 'abort'
+
+[build-dependencies]
+cc = "1.0"

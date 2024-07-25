@@ -1,0 +1,19 @@
+# IDEs
+.vscode/
+.idea/
+
+# Rust
+/target
+/target*
+debug/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# Testing artifacts
+test_llm.json
+
+# SAST
+sonar-project.properties
+.scannerwork/
+
