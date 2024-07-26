@@ -8,7 +8,7 @@ fn main() {
 
     // Create a symbolic link to the kernel crate
     let kernel_path = Path::new(&kernel_src_path).join("rust/kernel");
-    let dest = Path::new("kernel_link");
+    let dest = Path::new("kernel_path");
 
     if dest.exists() {
         fs::remove_dir_all(dest).unwrap();

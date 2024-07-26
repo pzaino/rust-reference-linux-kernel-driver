@@ -29,16 +29,16 @@ KARCH2 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/inc
 endif
 
 # Define variables
-KERNEL_SRC_PATH ?= $(KDIR)
+KERNEL_SRC_PATH ?= ./rust_module/kernel_path
 
-# Output directory for the built module
+## Output directory for the built module
 BUILD_DIR := build
 
 # The Rust project directory
 RUST_DIR := rust_module
 
 # The name of the generated module
-MODULE_NAME := rust_module.ko
+MODULE_NAME := rust_hello
 
 # Ensure the environment variable is exported for the build script
 export KERNEL_SRC_PATH
@@ -49,11 +49,11 @@ export KERNEL_SRC_PATH
 all: module
 
 # Build the Rust project
-$(RUST_DIR)/target/release/lib$(MODULE_NAME): $(RUST_DIR)/Cargo.toml $(RUST_DIR)/src/lib.rs
+$(RUST_DIR)/target/release/librust_hello.a: $(RUST_DIR)/Cargo.toml $(RUST_DIR)/src/lib.rs
 	cd $(RUST_DIR) && cargo build --release
 
 # Build the kernel module using the kernel build system
-module: $(RUST_DIR)/target/release/lib$(MODULE_NAME)
+module: $(RUST_DIR)/target/release/librust_hello.a $(BUILD_DIR)/Makefile
 	$(MAKE) -C $(KERNEL_SRC_PATH) M=$(PWD)/$(BUILD_DIR) modules
 
 # Clean the build directory
@@ -67,8 +67,8 @@ $(BUILD_DIR)/Makefile: $(BUILD_DIR)/Kbuild
 
 # Create a Kbuild file to instruct the kernel build system
 $(BUILD_DIR)/Kbuild: 
-	echo "obj-m += $(MODULE_NAME)" > $(BUILD_DIR)/Kbuild
-	echo "rust_hello-objs := $(RUST_DIR)/target/release/lib$(MODULE_NAME)" >> $(BUILD_DIR)/Kbuild
+	echo "obj-m += $(MODULE_NAME).o" > $(BUILD_DIR)/Kbuild
+	echo "$(MODULE_NAME)-objs := $(RUST_DIR)/target/release/librust_hello.a" >> $(BUILD_DIR)/Kbuild
 
 # Ensure the build directory is set up before building the module
-$(RUST_DIR)/target/release/lib$(MODULE_NAME): $(BUILD_DIR)/Makefile
+$(RUST_DIR)/target/release/librust_hello.a: $(BUILD_DIR)/Makefile

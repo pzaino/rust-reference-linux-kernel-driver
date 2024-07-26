@@ -1,0 +1,10 @@
+[package]
+name = "rust_hello"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+kernel = { path = "./kernel_path" } # This will be set by the build script
+
+[build]
+build = "build.rs"

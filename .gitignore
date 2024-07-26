@@ -3,12 +3,19 @@
 .idea/
 
 # Rust
-/target
-/target*
+**/target
+**/target*
 debug/
-Cargo.lock
+**/Cargo.lock
 **/*.rs.bk
 *.pdb
+
+# Kernel
+**/kernel_path
+**/Kbuild
+build/
+**/build*
+
 
 # Testing artifacts
 test_llm.json

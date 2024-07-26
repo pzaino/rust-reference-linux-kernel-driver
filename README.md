@@ -17,9 +17,7 @@ of writing kernel code and you must know what you're doing.
 1. Clone this repository
 2. Change the name of the module in the `Cargo.toml` file
 3. Change the name of the module in the `src/lib.rs` file
-4. Update module_metadata in `src/module_metadata.rs`
-5. Add your driver code in the `src/driver.rs` file
-6. If needed update the `src/module.c` file
+4. Link the kernel sources to the project with `ln -s /usr/src/$(uname -m)/build ./rust_module/kernel_path`
 7. Run `make` to build the module
 
 ## How to load the module
