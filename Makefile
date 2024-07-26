@@ -1,8 +1,3 @@
-ifneq ($(KERNELRELEASE),)
-obj-m := rust_kernel_module.o
-rust_kernel_module-objs := module.o target/release/librust_kernel_module.a
-
-else
 # Get Linux kernel version
 LKER  := $(shell uname -r)
 # Remove things like -default or -generic from the kernel version
@@ -33,26 +28,47 @@ KARCH1 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/inc
 KARCH2 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/include/generated/
 endif
 
-# Use clang for compiling module.c
-CC := clang
+# Define variables
+KERNEL_SRC_PATH ?= $(KDIR)
 
-# Get current directory
-PWD   := $(shell pwd)
+# Output directory for the built module
+BUILD_DIR := build
 
-all: rustlib kernel_module
+# The Rust project directory
+RUST_DIR := rust_module
 
-rustlib:
-	cargo build --release
+# The name of the generated module
+MODULE_NAME := rust_module.ko
 
-module.o: src/module.c
-	$(CC) $(CFLAGS) -I$(KINC1) -I$(KINC2) -I$(KINC3) -I$(KARCH0) -I$(KARCH1) -I$(KARCH2) -c -o $@ $<
+# Ensure the environment variable is exported for the build script
+export KERNEL_SRC_PATH
 
-kernel_module: module.o
-	$(MAKE) -C $(KDIR) M=$(PWD) modules
+.PHONY: all clean module
 
+# Default target: Build the Rust project and the kernel module
+all: module
+
+# Build the Rust project
+$(RUST_DIR)/target/release/lib$(MODULE_NAME): $(RUST_DIR)/Cargo.toml $(RUST_DIR)/src/lib.rs
+	cd $(RUST_DIR) && cargo build --release
+
+# Build the kernel module using the kernel build system
+module: $(RUST_DIR)/target/release/lib$(MODULE_NAME)
+	$(MAKE) -C $(KERNEL_SRC_PATH) M=$(PWD)/$(BUILD_DIR) modules
+
+# Clean the build directory
 clean:
-	cargo clean
-	rm -f module.o module_metadata.o
-	$(MAKE) -C $(KDIR) M=$(PWD) clean
+	rm -rf $(BUILD_DIR) $(RUST_DIR)/target
 
-endif
+# Set up the build directory structure for the kernel build system
+$(BUILD_DIR)/Makefile: $(BUILD_DIR)/Kbuild
+	mkdir -p $(BUILD_DIR)
+	ln -sf $(PWD)/Kbuild $(BUILD_DIR)/Kbuild
+
+# Create a Kbuild file to instruct the kernel build system
+$(BUILD_DIR)/Kbuild: 
+	echo "obj-m += $(MODULE_NAME)" > $(BUILD_DIR)/Kbuild
+	echo "rust_hello-objs := $(RUST_DIR)/target/release/lib$(MODULE_NAME)" >> $(BUILD_DIR)/Kbuild
+
+# Ensure the build directory is set up before building the module
+$(RUST_DIR)/target/release/lib$(MODULE_NAME): $(BUILD_DIR)/Makefile

@@ -1,22 +1,13 @@
 [package]
-name = "rust_kernel_module"
+name = "rust_hello"
 version = "0.1.0"
-authors = ["Your Name <your.email@example.com>"]
 edition = "2018"
 
-[lib]
-crate-type = ["staticlib"]
+[build-dependencies]
+kernel_path = "0.1"
 
 [dependencies]
-#alloc = { version = "0.5", default-features = false }
+kernel = { path = "kernel_link" } # This will be set by the build script
 
-[profile.release]
-codegen-units = 1
-incremental = false
-lto = true
-opt-level = 'z'
-panic = 'abort'
-
-[build-dependencies]
-cc = "1.0"
-
+[build]
+build = "build.rs"
