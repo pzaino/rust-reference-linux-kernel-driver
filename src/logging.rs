@@ -3,7 +3,7 @@
 #![allow(non_upper_case_globals)]
 
 extern "C" {
-    fn printk(fmt: *const u8, ...) -> i32;
+    pub fn printk(fmt: *const u8, ...) -> i32;
 }
 
 #[macro_export]
@@ -20,7 +20,7 @@ macro_rules! printk {
     };
 }
 
-pub fn printk(s: &str) {
+pub fn log_printk(s: &str) {
     unsafe {
         printk(s.as_ptr());
     }

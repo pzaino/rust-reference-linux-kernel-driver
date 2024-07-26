@@ -4,8 +4,11 @@ version = "0.1.0"
 authors = ["Your Name <your.email@example.com>"]
 edition = "2018"
 
+[lib]
+crate-type = ["staticlib"]
+
 [dependencies]
-# Add dependencies here
+#alloc = { version = "0.5", default-features = false }
 
 [profile.release]
 codegen-units = 1
@@ -16,3 +19,4 @@ panic = 'abort'
 
 [build-dependencies]
 cc = "1.0"
+

@@ -1,5 +1,5 @@
 use core::alloc::{GlobalAlloc, Layout};
-use core::ptr::null_mut;
+//use core::ptr::null_mut;
 
 extern "C" {
     fn kmalloc(size: usize, flags: u32) -> *mut u8;

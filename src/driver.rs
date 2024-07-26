@@ -1,7 +1,8 @@
 extern crate alloc;
 
-use crate::logging::printk;
 use alloc::vec::Vec;
+use alloc::format; // Import the format macro
+use crate::logging::log_printk;
 
 pub fn init() {
     // Example use of Vec in kernel module
@@ -11,12 +12,12 @@ pub fn init() {
     data.push(3);
 
     for val in &data {
-        printk!("Value: {}\n", val);
+        log_printk(&format!("Value: {}\n", val));
     }
 
-    printk!("Driver initialized with Vec.\n");
+    log_printk("Driver initialized with Vec.\n");
 }
 
 pub fn cleanup() {
-    printk!("Driver cleaned up.\n");
+    log_printk("Driver cleaned up.\n");
 }
