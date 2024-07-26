@@ -28,14 +28,15 @@ KARCH2 := /usr/src/linux-$(LKER_BASE)/arch/$(LKARCH)/include/generated/
 # If we are on OpenSUSE, check if linux-<version>-obj exists, if it does use that for the kernel headers
 # because all linux distros have to do their own thing (silly distros)
 ifneq ($(wildcard /usr/src/linux-$(LKER_BASE)-obj/),)
-#KDIR  := /usr/src/linux-$(LKER_BASE)-obj
-#KINC1 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH)/default/include/linux
-#KINC2 := /usr/src/linux-$(LKER_BASE)-obj/include/
 KINC3  := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/include/
 KARCH1 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/include/
 KARCH2 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/include/generated/
 endif
 
+# Use clang for compiling module.c
+CC := clang
+
+# Get current directory
 PWD   := $(shell pwd)
 
 all: rustlib kernel_module
