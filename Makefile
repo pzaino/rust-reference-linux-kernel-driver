@@ -1,6 +1,6 @@
 ifneq ($(KERNELRELEASE),)
 obj-m := rust_kernel_module.o
-rust_kernel_module-objs := module.o module_metadata.o target/release/librust_kernel_module.a
+rust_kernel_module-objs := module.o target/release/librust_kernel_module.a
 
 else
 # Get Linux kernel version
@@ -46,10 +46,7 @@ rustlib:
 module.o: src/module.c
 	$(CC) $(CFLAGS) -I$(KINC1) -I$(KINC2) -I$(KINC3) -I$(KARCH0) -I$(KARCH1) -I$(KARCH2) -c -o $@ $<
 
-module_metadata.o: src/module_metadata.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-kernel_module: module.o module_metadata.o
+kernel_module: module.o
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
 clean:
