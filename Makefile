@@ -31,7 +31,7 @@ ifneq ($(wildcard /usr/src/linux-$(LKER_BASE)-obj/),)
 #KDIR  := /usr/src/linux-$(LKER_BASE)-obj
 #KINC1 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH)/default/include/linux
 #KINC2 := /usr/src/linux-$(LKER_BASE)-obj/include/
-KINC3  := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH)/default/include/
+KINC3  := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/include/
 KARCH1 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/include/
 KARCH2 := /usr/src/linux-$(LKER_BASE)-obj/$(LKARCH_R)/default/arch/$(LKARCH)/include/generated/
 endif
